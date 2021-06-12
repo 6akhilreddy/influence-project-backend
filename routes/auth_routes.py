@@ -26,7 +26,7 @@ def influencerSignin():
         successMsg = {"message":"Successfully Verified Influencer", "body": response}
         return jsonify(successMsg), 201
     else:
-        errorMsg = {"message":"password incorrect", "body": response}
+        errorMsg = {"message":"password incorrect", "body": "password incorrect"}
         return jsonify(errorMsg), 401
 
 @app_auth.route('/v1/signup/brand',methods=["POST"])
@@ -46,5 +46,37 @@ def brandSignin():
         successMsg = {"message":"Successfully Verified Influencer", "body": response}
         return jsonify(successMsg), 201
     else:
-        errorMsg = {"message":"password incorrect", "body": response}
+        errorMsg = {"message":"password incorrect", "body": "password incorrect"}
         return jsonify(errorMsg), 401
+
+@app_auth.route('/v1/influencer/profile/<username>',methods=["GET"])
+def getInfluencerProfile(username):
+    print(username)
+    influencerController = InfluencerController()
+    response = influencerController.getInfluencer(username)
+    successMsg = {"message":"Successfully Returned Influencer", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/influencer/profile/update',methods=["PUT"])
+def updateInfluencerProfile():
+    content = request.json
+    influencerController = InfluencerController()
+    response = influencerController.updateInfluencer(content)
+    successMsg = {"message":"Successfully Updated Influencer", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/profile/<username>',methods=["GET"])
+def getBrandProfile(username):
+    print(username)
+    brandController = BrandController()
+    response = brandController.getBrand(username)
+    successMsg = {"message":"Successfully Returned Brand", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/profile/update',methods=["PUT"])
+def updateBrandProfile():
+    content = request.json
+    brandController = BrandController()
+    response = brandController.updateBrand(content)
+    successMsg = {"message":"Successfully Updated Brand", "body": response}
+    return jsonify(successMsg), 200

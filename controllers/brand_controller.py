@@ -47,3 +47,26 @@ class BrandController:
         
         else:
             raise Exception("Username does not exists")
+
+    def getBrand(self, username):
+
+        # get the influencer data by username
+        brands = self.brand.find({'username': username})
+
+        if len(brands) > 0:
+            # get the first user
+            brand_data = brands[0]
+            del brand_data['password']
+
+            return brand_data
+        
+        else:
+            raise Exception("Username does not exists")
+    
+    def updateBrand(self, company):
+        self.validator.validate(company, self.brand.fields, self.brand.update_required_fields)
+        id = company['_id']
+        del company['_id']
+        response = self.brand.update(id, company)
+
+        return response

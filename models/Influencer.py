@@ -12,10 +12,17 @@ class Influencer(object):
             "username": "string",
             "email": "string",
             "password": "string",
+            "name":"string",
+            "gender":"string",
+            "description":"string",
             "instagram_handle": "string",
-            "date_of_birth": "datetime",
+            "age": "string",
+            "instagram_posts":"string",
+            "instagram_followers":"string",
+            "facebook_handle":"string",
+            "twitter_handle":"string",
             "contact": "string",
-            "area_of_interest": list,
+            "interests": list,
             "brands": list,
             "created": "datetime",
             "updated": "datetime"
@@ -25,7 +32,7 @@ class Influencer(object):
         self.create_required_fields = ["username", "email", "password"]
 
         # Fields required for UPDATE
-        self.update_required_fields = ["username", "password"]
+        self.update_required_fields = ["username"]
 
         # Fields required for Login
         self.login_required_fields = ["username", "password"]

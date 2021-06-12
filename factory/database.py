@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_pymongo import PyMongo
-from bson import ObjectId
+import json
+from bson import ObjectId, json_util
 
 from app import app
 
@@ -50,10 +51,10 @@ class Database(object):
 
         element["updated"] = datetime.now()
         set_obj = {"$set": element}  # update value
-
-        updated = self.db[collection_name].update_one(criteria, set_obj)
-        if updated.matched_count == 1:
-            return "Record Successfully Updated"
+        updated = self.db[collection_name].update(criteria, set_obj)
+        print(updated)
+        if updated['n'] == 1:
+            return "successfully updated"
 
     def delete(self, id, collection_name):
         deleted = self.db[collection_name].delete_one({"_id": ObjectId(id)})

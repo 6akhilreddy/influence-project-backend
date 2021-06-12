@@ -13,6 +13,7 @@ class Brand(object):
             "password": "string",
             "email":"string",
             "brand_name": "string",
+            "head_quater": "string",
             "industry": "string",
             "contact": "string",
             "influencers": list,
@@ -24,7 +25,7 @@ class Brand(object):
         self.create_required_fields = ["username", "password", "email", "brand_name"]
 
         # Fields required for UPDATE
-        self.update_required_fields = ["username","password"]
+        self.update_required_fields = ["username"]
 
         # Fields required for Login
         self.login_required_fields = ["username","password"]

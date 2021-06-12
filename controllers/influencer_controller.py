@@ -24,11 +24,6 @@ class InfluencerController:
             encrypted_password = self.security.encryptPassword(user['password'])
             user['password'] = encrypted_password
 
-            # get the date from timestamp if present
-            if 'date_of_birth' in user:
-                date_of_birth = datetime.utcfromtimestamp(int(user['date_of_birth'])/1000.0).strftime('%Y-%m-%d %H:%M:%S.%f')
-                user['date_of_birth'] = date_of_birth
-
             response = self.influencer.create(user)
 
             return response
@@ -54,3 +49,26 @@ class InfluencerController:
         
         else:
             raise Exception("Username does not exists")
+
+    def getInfluencer(self, username):
+
+        # get the influencer data by username
+        influencers = self.influencer.find({'username': username})
+
+        if len(influencers) > 0:
+            # get the first user
+            influencer_data = influencers[0]
+            del influencer_data['password']
+
+            return influencer_data
+        
+        else:
+            raise Exception("Username does not exists")
+    
+    def updateInfluencer(self, user):
+        self.validator.validate(user, self.influencer.fields, self.influencer.update_required_fields)
+        id = user['_id']
+        del user['_id']
+        response = self.influencer.update(id, user)
+
+        return response
