@@ -3,6 +3,7 @@ app_auth = Blueprint('app_auth',__name__)
 
 from controllers.influencer_controller import InfluencerController
 from controllers.brand_controller import BrandController
+from controllers.campaign_controller import CampaignController
 
 @app_auth.errorhandler(Exception)
 def all_exception_handler(error):
@@ -80,3 +81,80 @@ def updateBrandProfile():
     response = brandController.updateBrand(content)
     successMsg = {"message":"Successfully Updated Brand", "body": response}
     return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/campaign/create',methods=["POST"])
+def createCampaign():
+    content = request.json
+    campaignController = CampaignController()
+    response = campaignController.createCampaign(content)
+    successMsg = {"message":"Successfully Created campaign", "body": response}
+    return jsonify(successMsg), 201
+
+@app_auth.route('/v1/brand/campaign/<brandUsername>',methods=["GET"])
+def getCampaign(brandUsername):
+    campaignController = CampaignController()
+    response = campaignController.getCampaignsSpecificToBrand(brandUsername)
+    successMsg = {"message":"Successfully Returned Campaign", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/influencer/campaigns',methods=["GET"])
+def getAllCampaigns():
+    campaignController = CampaignController()
+    response = campaignController.getAllCampaigns()
+    successMsg = {"message":"Successfully Returned Campaigns", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/influencer/campaigns/filtered/<influencerUsername>',methods=["GET"])
+def getFilteredCampaigns(influencerUsername):
+    campaignController = CampaignController()
+    response = campaignController.getCampaignsSpecificToInfluencer(influencerUsername)
+    successMsg = {"message":"Successfully Returned Campaigns", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/influencer/campaign/apply',methods=["POST"])
+def applyCampaign():
+    content = request.json
+    campaignController = CampaignController()
+    response = campaignController.applyToCampaign(content['username'], content['campaignId'])
+    if response:
+        successMsg = {"message":"Successfully Applied campaign", "body": response}
+        return jsonify(successMsg), 201
+    else:
+        errorMsg = {"message":"Not Applicable", "body": "No applicable"}
+        return jsonify(errorMsg), 401
+
+@app_auth.route('/v1/brand/campaign/applications',methods=["GET"])
+def getApplications():
+    campaignController = CampaignController()
+    response = campaignController.getAllApplicationsForCampaign()
+    successMsg = {"message":"Successfully Returned Campaign", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/campaign/application/accept',methods=["POST"])
+def acceptApplication():
+    content = request.json
+    campaignController = CampaignController()
+    response = campaignController.acceptApplication(content['campaignId'], content['influencerUsername'])
+    successMsg = {"message":"Successfully Returned Campaign", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/campaign/application/reject',methods=["POST"])
+def rejectApplication():
+    content = request.json
+    campaignController = CampaignController()
+    response = campaignController.rejectApplication(content['campaignId'], content['influencerUsername'])
+    successMsg = {"message":"Successfully Returned Campaign", "body": response}
+    return jsonify(successMsg), 200
+
+
+@app_auth.route('/v1/influencer/application/status/<influencerUsername>',methods=["GET"])
+def getAllApplicationStatus(influencerUsername):
+    campaignController = CampaignController()
+    response = campaignController.getApplicationStatusForInfluencer(influencerUsername)
+    successMsg = {"message":"Successfully Returned Campaign", "body": response}
+    return jsonify(successMsg), 200
+
+
+
+
+    
