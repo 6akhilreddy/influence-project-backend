@@ -13,6 +13,7 @@ textdistance = "*"
 werkzeug = "*"
 flask-pymongo = "*"
 flask-cors = "*"
+pymongo = {extras = ["srv"],version = "*"}
 
 [requires]
 python_version = "3.7"
