@@ -3,7 +3,7 @@ import requests
 import json
 import textdistance as td
 
-from web_scraping.mock import instagram_mock_strategies, social_media_mock_strategies, organic_growth_strategies
+from web_scraping.mock import instagram_mock_strategies, social_media_mock_strategies, organic_growth_strategies, fashion_strategies, music_strategies, photography_strategies
 
 from web_scraping.current_Instagram_trends.instagram_web_scrapper_1 import InstagramWebScrapper1
 from web_scraping.current_Instagram_trends.instagram_web_scrapper_2 import InstagramWebScrapper2
@@ -20,6 +20,12 @@ from web_scraping.organic_growth_strategies.organic_web_scrapper_1 import Organi
 from web_scraping.organic_growth_strategies.organic_web_scrapper_2 import OrganicWebScrapper2
 from web_scraping.organic_growth_strategies.organic_web_scrapper_3 import OrganicWebScrapper3
 from web_scraping.organic_growth_strategies.organic_web_scrapping_4 import OrganicWebScrapper4
+
+from web_scraping.fashion.fashion_web_scrapper_1 import FashionWebScrapper1
+
+from web_scraping.music.music_web_scrapper_1 import MusicWebScrapper1
+
+from web_scraping.photography.photo_web_scrapper_1 import PhotoWebScrapper1
 
 
 class WebScrappingMain:
@@ -181,6 +187,58 @@ class WebScrappingMain:
 
 
         return json.dumps(organic_growth_strategies)
+    
+    def __getFashionStrategies(self, keyword):
+        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        if len(fashion_strategies) == 0:
+
+            strategies = []
+            strategy1 = FashionWebScrapper1()
+
+            strategies.append(strategy1.getStrategy("https://shanebarker.com/blog/fashion-influencer-marketing"))
+
+            filtered_data = self.__filterStartegies(strategies)
+            merged_data = self.__mergeStrategies(filtered_data)
+
+            fashion_strategies.extend(merged_data)
+
+
+        return json.dumps(fashion_strategies)
+    
+    def __getMusicStrategies(self, keyword):
+        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        if len(music_strategies) == 0:
+
+            strategies = []
+            strategy1 = MusicWebScrapper1()
+
+            strategies.append(strategy1.getStrategy("https://www.ucraft.com/blog/7-tips-for-promoting-your-music-on-instagram"))
+
+            filtered_data = self.__filterStartegies(strategies)
+            merged_data = self.__mergeStrategies(filtered_data)
+
+            music_strategies.extend(merged_data)
+
+
+        return json.dumps(music_strategies)
+    
+    def  __getPhotoStrategies(self, keyword):
+        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        if len(photography_strategies) == 0:
+
+            strategies = []
+            strategy1 = PhotoWebScrapper1()
+
+            strategies.append(strategy1.getStrategy("https://justagirlandherblog.com/interior-photography-tips-for-bloggers"))
+
+            filtered_data = self.__filterStartegies(strategies)
+            merged_data = self.__mergeStrategies(filtered_data)
+
+            photography_strategies.extend(merged_data)
+
+
+        return json.dumps(photography_strategies)
+
 
 
         
@@ -191,3 +249,9 @@ class WebScrappingMain:
             return self.__getSocialMediaStrategies(keyword)
         elif "Organic".upper() in keyword.upper() and "growth".upper() in keyword.upper():
             return self.__getOrganicGrowthStrategies(keyword)
+        elif "fashion".upper() in keyword.upper():
+            return self.__getFashionStrategies(keyword)
+        elif "music".upper() in keyword.upper():
+            return self.__getMusicStrategies(keyword)
+        elif "photography".upper() in keyword.upper():
+            return self.__getPhotoStrategies(keyword)

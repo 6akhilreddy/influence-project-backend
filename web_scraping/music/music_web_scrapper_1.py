@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-class InstagramWebScrapper5:
+class MusicWebScrapper1:
     def __init__(self) -> None:
         pass
 
@@ -9,19 +9,20 @@ class InstagramWebScrapper5:
         processeddata = {}
         page = requests.get(url)
         soup = BeautifulSoup(page.text, "html.parser")
-        allHeadings = soup.find_all("h3")
+        allHeadings = soup.find_all('h3')
         headingData = []
         contentData = []
         for idx, heading in enumerate(allHeadings):
-            if idx > 11:
+            if idx > 5:
                 break
-            description = heading.find_next_sibling("p")
             #clean the heading data
-            headingArr = str(heading.b.text).split(' ')
-            headingArr.pop(0)
-            headingtxt = ' '.join(headingArr)
-            headingData.append(headingtxt)
-            contentData.append(str(description))
+            headingData.append(heading.text)
+            description = ""
+            tempValue = heading
+            while tempValue.next_sibling and tempValue.next_sibling.name != 'h3':
+                description+='\n'+str(tempValue.next_sibling)
+                tempValue = tempValue.next_sibling
+            contentData.append(description)
 
         processeddata["heading"] = headingData
         processeddata["content"] = contentData

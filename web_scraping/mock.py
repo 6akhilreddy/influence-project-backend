@@ -1,3 +1,6 @@
 instagram_mock_strategies = []
 social_media_mock_strategies = []
 organic_growth_strategies = []
+fashion_strategies = []
+music_strategies = []
+photography_strategies = []

@@ -89,10 +89,11 @@ class CampaignController:
         
         return False
     
-    def getAllApplicationsForCampaign(self):
+    def getAllApplicationsForCampaign(self, brandUsername):
 
         # get campagin
-        campaigns = self.campaign.find({})
+        campaigns = self.campaign.find({"brand_username": brandUsername})
+        print(campaigns)
         response = []
         for campaign in campaigns:
             resp = {}
@@ -180,9 +181,10 @@ class CampaignController:
             resp["application_status"] = self.getApplicationStatus(campaign, influencer_data)
             if 'brand_username' in campaign:
                 brand = self.getBrand(campaign["brand_username"])
-                resp["brand_email"] = brand['email']
-                resp["brand_name"] = brand['brand_name']
-                resp["brand_headquater"] = brand['head_quater'] 
+                print(brand)
+                resp["brand_email"] = 'Not Available' if  'email' not in brand else brand['email']
+                resp["brand_name"] = 'Not Available' if 'brand_name' not in brand else brand['brand_name']
+                resp["brand_headquater"] = 'Not Available' if 'head_quater' not in brand else  brand['head_quater']
             response.append(resp)
 
 

@@ -123,10 +123,10 @@ def applyCampaign():
         errorMsg = {"message":"Not Applicable", "body": "No applicable"}
         return jsonify(errorMsg), 401
 
-@app_auth.route('/v1/brand/campaign/applications',methods=["GET"])
-def getApplications():
+@app_auth.route('/v1/brand/campaign/applications/<brandUsername>',methods=["GET"])
+def getApplications(brandUsername):
     campaignController = CampaignController()
-    response = campaignController.getAllApplicationsForCampaign()
+    response = campaignController.getAllApplicationsForCampaign(brandUsername)
     successMsg = {"message":"Successfully Returned Campaign", "body": response}
     return jsonify(successMsg), 200
 
@@ -153,7 +153,6 @@ def getAllApplicationStatus(influencerUsername):
     response = campaignController.getApplicationStatusForInfluencer(influencerUsername)
     successMsg = {"message":"Successfully Returned Campaign", "body": response}
     return jsonify(successMsg), 200
-
 
 
 

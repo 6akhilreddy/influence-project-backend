@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from urllib.request import Request, urlopen
+import requests
 
 class InstagramWebScrapper4:
     def __init__(self) -> None:
@@ -7,10 +7,8 @@ class InstagramWebScrapper4:
 
     def getStrategy(self, url):
         processeddata = {}
-        hdr = {'User-Agent': 'Mozilla/5.0'}
-        req = Request(url,headers=hdr)
-        page = urlopen(req)
-        soup = BeautifulSoup(page, "html.parser")
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text, "html.parser")
         allHeadings = soup.find_all(class_="ez-toc-section")
         headingData = []
         contentData = []
