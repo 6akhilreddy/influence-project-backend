@@ -16,6 +16,12 @@ class CampaignController:
         response = self.campaign.create(campaign)
 
         return response
+    
+    def deleteCampaign(self, campaignId):
+
+        response = self.campaign.delete(campaignId)
+
+        return response
 
     def getAllCampaigns(self):
 

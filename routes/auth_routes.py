@@ -154,6 +154,12 @@ def getAllApplicationStatus(influencerUsername):
     successMsg = {"message":"Successfully Returned Campaign", "body": response}
     return jsonify(successMsg), 200
 
+@app_auth.route('/v1/brand/campaign/<campaignId>', methods=["DELETE"])
+def deleteCampaign(campaignId):
+    campaignController = CampaignController()
+    response = campaignController.deleteCampaign(campaignId)
+    successMsg = {"message":"Successfully Deleted Campaign", "body": response}
+    return jsonify(successMsg), 200
 
 
     
