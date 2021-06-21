@@ -3,7 +3,7 @@ import requests
 import json
 import textdistance as td
 
-from web_scraping.mock import instagram_mock_strategies, social_media_mock_strategies, organic_growth_strategies, fashion_strategies, music_strategies, photography_strategies
+from web_scraping.mock import instagram_mock_strategies, social_media_mock_strategies, organic_growth_strategies, fashion_strategies, music_strategies, photography_strategies, instagram_urls, social_media_urls, organic_growth_urls, fashion_urls, music_urls, photo_urls
 
 from web_scraping.current_Instagram_trends.instagram_web_scrapper_1 import InstagramWebScrapper1
 from web_scraping.current_Instagram_trends.instagram_web_scrapper_2 import InstagramWebScrapper2
@@ -116,7 +116,7 @@ class WebScrappingMain:
 
     # get strategies specific to instagram
     def __getInstagramStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # instagram_urls = self.__getTopPagesBasedOnSearch(keyword)
 
         if len(instagram_mock_strategies) == 0:
 
@@ -128,11 +128,11 @@ class WebScrappingMain:
             strategy4 = InstagramWebScrapper4()
             strategy5 = InstagramWebScrapper5()
 
-            strategies.append(strategy1.getStrategy("https://www.cyberclick.net/numericalblogen/10-exciting-instagram-trends-to-keep-track-of"))
-            strategies.append(strategy2.getStrategy("https://sproutsocial.com/insights/instagram-trends/"))
-            strategies.append(strategy3.getStrategy("https://influencermarketinghub.com/instagram-marketing-trends-2021/"))
-            strategies.append(strategy4.getStrategy("https://blog.kicksta.co/instagram-trends"))
-            strategies.append(strategy5.getStrategy("https://blog.hootsuite.com/instagram-trends"))
+            strategies.append(strategy1.getStrategy(instagram_urls[0]))
+            strategies.append(strategy2.getStrategy(instagram_urls[1]))
+            strategies.append(strategy3.getStrategy(instagram_urls[2]))
+            strategies.append(strategy4.getStrategy(instagram_urls[3]))
+            strategies.append(strategy5.getStrategy(instagram_urls[4]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
@@ -143,7 +143,8 @@ class WebScrappingMain:
         return json.dumps(instagram_mock_strategies)
     
     def __getSocialMediaStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # social_media_urls = self.__getTopPagesBasedOnSearch(keyword)
+
         if len(social_media_mock_strategies) == 0:
 
             strategies = []
@@ -153,10 +154,10 @@ class WebScrappingMain:
             strategy3 = SocialMediaWebScrapper3()
             strategy4 = SocialMediaWebScrapper4()
 
-            strategies.append(strategy1.getStrategy("https://www.entrepreneur.com/article/293321"))
-            strategies.append(strategy2.getStrategy("https://buffer.com/library/social-media-marketing-strategy"))
-            strategies.append(strategy3.getStrategy("https://sproutsocial.com/insights/social-media-marketing-strategy"))
-            strategies.append(strategy4.getStrategy("https://influencermarketinghub.com/social-media-marketing-strategy/"))
+            strategies.append(strategy1.getStrategy(social_media_urls[0]))
+            strategies.append(strategy2.getStrategy(social_media_urls[1]))
+            strategies.append(strategy3.getStrategy(social_media_urls[2]))
+            strategies.append(strategy4.getStrategy(social_media_urls[3]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
@@ -166,7 +167,8 @@ class WebScrappingMain:
         return json.dumps(social_media_mock_strategies)
     
     def __getOrganicGrowthStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # organic_growth_urls = self.__getTopPagesBasedOnSearch(keyword)
+
         if len(organic_growth_strategies) == 0:
 
             strategies = []
@@ -175,10 +177,10 @@ class WebScrappingMain:
             strategy3 = OrganicWebScrapper3()
             strategy4 = OrganicWebScrapper4()
 
-            strategies.append(strategy1.getStrategy("https://corporatefinanceinstitute.com/resources/knowledge/strategy/organic-growth"))
-            strategies.append(strategy2.getStrategy("https://hingemarketing.com/blog/story/how-to-drive-organic-growth-5-proven-strategies-for-professional-services-firms"))
-            strategies.append(strategy3.getStrategy("https://www.moengage.com/blog/how-to-build-a-growth-team"))
-            strategies.append(strategy4.getStrategy("https://www.prophet.com/2013/12/10-quick-ways-to-drive-organic-growth"))
+            strategies.append(strategy1.getStrategy(organic_growth_urls[0]))
+            strategies.append(strategy2.getStrategy(organic_growth_urls[1]))
+            strategies.append(strategy3.getStrategy(organic_growth_urls[2]))
+            strategies.append(strategy4.getStrategy(organic_growth_urls[3]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
@@ -189,13 +191,14 @@ class WebScrappingMain:
         return json.dumps(organic_growth_strategies)
     
     def __getFashionStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # fashion_urls = self.__getTopPagesBasedOnSearch(keyword)
+
         if len(fashion_strategies) == 0:
 
             strategies = []
             strategy1 = FashionWebScrapper1()
 
-            strategies.append(strategy1.getStrategy("https://shanebarker.com/blog/fashion-influencer-marketing"))
+            strategies.append(strategy1.getStrategy(fashion_urls[0]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
@@ -206,13 +209,14 @@ class WebScrappingMain:
         return json.dumps(fashion_strategies)
     
     def __getMusicStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # music_urls = self.__getTopPagesBasedOnSearch(keyword)
+
         if len(music_strategies) == 0:
 
             strategies = []
             strategy1 = MusicWebScrapper1()
 
-            strategies.append(strategy1.getStrategy("https://www.ucraft.com/blog/7-tips-for-promoting-your-music-on-instagram"))
+            strategies.append(strategy1.getStrategy(music_urls[0]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
@@ -223,13 +227,14 @@ class WebScrappingMain:
         return json.dumps(music_strategies)
     
     def  __getPhotoStrategies(self, keyword):
-        # urls = self.__getTopPagesBasedOnSearch(keyword)
+        # photo_urls = self.__getTopPagesBasedOnSearch(keyword)
+
         if len(photography_strategies) == 0:
 
             strategies = []
             strategy1 = PhotoWebScrapper1()
 
-            strategies.append(strategy1.getStrategy("https://justagirlandherblog.com/interior-photography-tips-for-bloggers"))
+            strategies.append(strategy1.getStrategy(photo_urls[0]))
 
             filtered_data = self.__filterStartegies(strategies)
             merged_data = self.__mergeStrategies(filtered_data)
