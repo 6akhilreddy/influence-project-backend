@@ -99,18 +99,16 @@ class CampaignController:
 
         # get campagin
         campaigns = self.campaign.find({"brand_username": brandUsername})
-        print(campaigns)
         response = []
         for campaign in campaigns:
             resp = {}
             resp["campaign_id"] = campaign["_id"]
             resp["campaign_title"] = campaign["campaign_title"]
             resp["influencers_applied"] = []
-            resp["application_status"] = "pending"
             if 'influencers_applied' in campaign:
                 for influencer in campaign['influencers_applied']:
                     influencer_data = self.getInfluencer(influencer)
-                    resp["application_status"] = self.getApplicationStatus(campaign, influencer_data)
+                    influencer_data["application_status"] = self.getApplicationStatus(campaign, influencer_data)
                     resp["influencers_applied"].append(influencer_data)
             response.append(resp)
 
@@ -121,7 +119,7 @@ class CampaignController:
         if 'influencers_accepted' in campaign:
             if influencer['username'] in campaign['influencers_accepted']:
                 return 'accepted'
-        elif 'influencers_rejected' in campaign:
+        if 'influencers_rejected' in campaign:
             if influencer['username'] in campaign['influencers_rejected']:
                 return 'rejected'
         
@@ -152,9 +150,11 @@ class CampaignController:
 
         if 'influencers_rejected' in campaign:
             campaign['influencers_rejected'].append(influencerUsername)
+            print(campaign['influencers_rejected'])
         else:
             campaign['influencers_rejected'] = []
             campaign['influencers_rejected'].append(influencerUsername)
+            print(campaign['influencers_rejected'])
 
         return self.campaign.update(campaignId, campaign)
     
