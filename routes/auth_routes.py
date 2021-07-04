@@ -161,5 +161,30 @@ def deleteCampaign(campaignId):
     successMsg = {"message":"Successfully Deleted Campaign", "body": response}
     return jsonify(successMsg), 200
 
+@app_auth.route('/v1/campaign/train', methods=["GET"])
+def trainModel():
+    campaignController = CampaignController()
+    response = campaignController.trainModel()
+    successMsg = {"message":"Successfully Trained Model", "body": response}
+    return jsonify(successMsg), 200
 
-    
+@app_auth.route('/v1/campaign/wipe', methods=["GET"])
+def wipeModel():
+    campaignController = CampaignController()
+    response = campaignController.wipeModel()
+    successMsg = {"message":"Successfully Wiped Model", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/campaign/generateCSV', methods=["GET"])
+def generateCSV():
+    campaignController = CampaignController()
+    response = campaignController.generateCSV()
+    successMsg = {"message":"Successfully Generated CSV", "body": response}
+    return jsonify(successMsg), 200
+
+@app_auth.route('/v1/brand/suggest/<brandUsername>',methods=["GET"])
+def getBrandSuggestions(brandUsername):
+    campaignController = CampaignController()
+    response = campaignController.getBrandSuggestions(brandUsername)
+    successMsg = {"message":"Successfully Returned Suggestion", "body": response}
+    return jsonify(successMsg), 200

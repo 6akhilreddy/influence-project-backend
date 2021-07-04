@@ -72,3 +72,6 @@ class InfluencerController:
         response = self.influencer.update(id, user)
 
         return response
+    
+    def findInfluencers(self, query):
+        return self.influencer.find(query)

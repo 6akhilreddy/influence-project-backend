@@ -3,6 +3,14 @@ from controllers.influencer_controller import InfluencerController
 from controllers.brand_controller import BrandController
 from factory.validation import Validator
 
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+import pickle
+import os
+import csv
+
 class CampaignController:
     def __init__(self) -> None:
         self.campaign = Campaign()
@@ -53,6 +61,50 @@ class CampaignController:
         brand = brandController.getBrand(brand_username)
 
         return brand
+
+    def getListAvg(self, list):
+        return sum(list) / len(list)
+    
+    def getInfluencersSpecificToBrand(self, brandUsername):
+        if os.path.isfile('ML/campaign.csv'):
+            campaigns = self.getCampaignsSpecificToBrand(brandUsername)
+
+            getAllMinAge = []
+            getAllMaxAge = []
+            getAllFollowers = []
+            getAllPosts = []
+
+            for campaign in campaigns:
+                if 'campaign_minage' in campaign:
+                    getAllMinAge.append(campaign['campaign_minage'])
+                if 'campaign_maxage' in campaign:
+                    getAllMaxAge.append(campaign['campaign_maxage'])
+                if 'campaign_followers' in campaign:
+                    getAllFollowers.append(campaign['campaign_followers'])
+                if 'campaign_posts' in campaign:
+                    getAllPosts.append(campaign['campaign_posts'])
+            
+            min_age_avg = self.getListAvg(getAllMinAge)
+            max_age_avg = self.getListAvg(getAllMaxAge)
+            followers_avg = self.getListAvg(getAllFollowers)
+            posts_avg = self.getListAvg(getAllPosts)
+
+            queries = []
+
+            queries.append({'age': { "$lte": max_age_avg }})
+            queries.append({'age': { "$gte": min_age_avg }})
+            queries.append({'instagram_followers': { "$gte": followers_avg }})
+            queries.append({'instagram_posts': { "$gte": posts_avg }})
+
+            influencerController = InfluencerController()
+            influencers = influencerController.findInfluencers({'$and':queries})
+
+            for influencer in influencers:
+                del influencer['password']
+
+            return influencers
+        
+        return []
 
     def getCampaignsSpecificToInfluencer(self, influencerUsername):
         
@@ -227,3 +279,59 @@ class CampaignController:
             return 'Rejected'
         
         return 'Pending'
+    
+    def generateCSV(self):
+        mongo_docs = self.campaign.find({})
+
+        # Convert the mongo docs to a DataFrame
+        fieldnames = list(mongo_docs[0].keys())
+        fieldnames.remove('_id')
+
+        # compute the output file directory and name
+        output_file = os.path.join('ML', 'campaign.csv')
+        with open(output_file, 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(mongo_docs)
+
+        return 'generated'
+
+    def trainModel(self):
+        # Load the csv file
+        df = pd.read_csv("ML/campaign.csv")
+
+        print(df.head())
+
+        # Select independent and dependent variable
+        X = df[["campaign_minage", "campaign_maxage", "campaign_followers", "campaign_posts"]]
+        y = df["influencer_username"]
+
+        # Split the dataset into train and test
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=50)
+
+        # Feature scaling
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test= sc.transform(X_test)
+
+        # Instantiate the model
+        classifier = RandomForestClassifier()
+
+        # Fit the model
+        classifier.fit(X_train, y_train)
+
+        # Make pickle file of our model
+        pickle.dump(classifier, open("ML/model.pkl", "wb"))
+
+        return 'trained'
+
+    def wipeModel(self):
+        os.remove("ML/model.pkl")   
+        os.remove("ML/campaign.csv")
+        return 'wiped' 
+
+    def getBrandSuggestions(self, brandUsername):
+        if os.path.isfile('ML/model.pkl'):
+            model = pickle.load(open("ML/model.pkl", "rb"))
+            return model.predict(brandUsername)
+        return []
